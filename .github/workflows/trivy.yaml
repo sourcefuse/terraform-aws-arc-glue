@@ -1,0 +1,162 @@
+---
+name: Trivy Security Scan with Security Hub Integration
+
+'on':
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+permissions:
+  security-events: write
+  contents: read
+  id-token: write
+  actions: read
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+    env:
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+      ECR_REPO: ${{ secrets.ECR_REPO }}
+      IMAGE_TAG: ${{ github.sha }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4.0.2
+        with:
+          aws-region: ${{ secrets.AWS_REGION }}
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          role-session-name: GitHubActions
+
+      - name: Verify AWS credentials
+        run: |
+          aws sts get-caller-identity
+          echo "AWS credentials configured successfully"
+
+      - name: Build Docker image
+        run: docker build -t test-image:latest .
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@0.30.0
+        continue-on-error: true
+        with:
+          image-ref: test-image:latest
+          severity: HIGH,CRITICAL
+          exit-code: 1
+          format: sarif
+          output: trivy-results.sarif
+      - name: Generate Security Hub findings
+        if: always()
+        run: |
+          # Scan with JSON format first to get structured data
+          trivy image \
+            --severity LOW,MEDIUM,HIGH,CRITICAL \
+            --exit-code 0 \
+            --format json \
+            -o scan-results.json \
+            test-image:latest
+
+          # Create ASFF findings using jq
+          cat scan-results.json | jq -r --arg account "$AWS_ACCOUNT_ID" --arg region "$AWS_REGION" '
+          [
+            .Results[]? | select(.Vulnerabilities) | .Vulnerabilities[] | {
+              "SchemaVersion": "2018-10-08",
+              "Id": ("trivy-" + .VulnerabilityID + "-" + (.PkgName // "unknown")),
+              "ProductArn": ("arn:aws:securityhub:" + $region + "::product/aquasecurity/aquasecurity"),
+              "GeneratorId": "Trivy",
+              "AwsAccountId": $account,
+              "Types": ["Software and Configuration Checks/Vulnerabilities/CVE"],
+              "CreatedAt": (now | strftime("%Y-%m-%dT%H:%M:%SZ")),
+              "UpdatedAt": (now | strftime("%Y-%m-%dT%H:%M:%SZ")),
+              "Severity": {
+                "Label": .Severity
+              },
+              "Title": ("Trivy found " + .VulnerabilityID + " in " + (.PkgName // "unknown package")),
+              "Description": (.Description // "No description available"),
+              "Remediation": {
+                "Recommendation": {
+                  "Text": "Update the package to fix the vulnerability",
+                  "Url": ("https://avd.aquasec.com/nvd/" + .VulnerabilityID)
+                }
+              },
+              "ProductFields": {
+                "Product Name": "Trivy"
+              },
+              "Resources": [{
+                "Type": "Container",
+                "Id": "test-image:latest",
+                "Partition": "aws",
+                "Region": $region,
+                "Details": {
+                  "Container": {
+                    "ImageName": "test-image:latest"
+                  },
+                  "Other": {
+                    "CVE ID": .VulnerabilityID,
+                    "Package Name": (.PkgName // "unknown"),
+                    "Installed Version": (.InstalledVersion // "unknown"),
+                    "Fixed Version": (.FixedVersion // "Not available")
+                  }
+                }
+              }],
+              "RecordState": "ACTIVE"
+            }
+          ]
+          ' > findings.json
+        env:
+          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+
+      - name: Push findings to Security Hub
+        if: always()
+        continue-on-error: true
+        run: |
+          # Check if Security Hub is enabled
+          if ! aws securityhub describe-hub --region ${{ secrets.AWS_REGION }} >/dev/null 2>&1; then
+            echo "⚠️ Security Hub is not enabled in region ${{ secrets.AWS_REGION }}"
+            echo "Enable it with: aws securityhub enable-security-hub --region ${{ secrets.AWS_REGION }}"
+            exit 0
+          fi
+
+          # Check if findings file exists and has content
+          if [ -s findings.json ]; then
+            echo "✅ Findings file generated successfully"
+
+            # Debug: Show findings count
+            FINDINGS_COUNT=$(jq length findings.json)
+            echo "📊 Found $FINDINGS_COUNT findings to import"
+
+            if [ "$FINDINGS_COUNT" -gt 0 ]; then
+              # Import findings to Security Hub
+              aws securityhub batch-import-findings \
+                --region ${{ secrets.AWS_REGION }} \
+                --findings file://findings.json
+
+              echo "✅ $FINDINGS_COUNT findings imported to Security Hub successfully"
+            else
+              echo "ℹ️ No findings to import"
+            fi
+          else
+            echo "❌ Findings file is empty or does not exist"
+          fi
+
+      - name: Display Security Hub findings summary
+        if: always()
+        run: |
+          echo "📊 Security Hub Integration Summary:"
+          echo "Region: ${{ secrets.AWS_REGION }}"
+          echo "Account ID: ${{ secrets.AWS_ACCOUNT_ID }}"
+          echo "Image scanned: test-image:latest"
+
+          if [ -f findings.json ]; then
+            FINDINGS_COUNT=$(jq length findings.json 2>/dev/null || echo "0")
+            echo "✅ Findings file generated successfully"
+            echo "📄 Total findings: $FINDINGS_COUNT"
+            echo "📄 File size: $(wc -c < findings.json) bytes"
+          else
+            echo "❌ Findings file not found"
+          fi
