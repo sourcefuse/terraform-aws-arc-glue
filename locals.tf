@@ -9,6 +9,5 @@ locals {
   # Conditional role creation
   create_iam_role = local.iam_enabled && var.iam_config.role_name == null
 
-  # Security group enabled
-  create_security_group = try(var.vpc_config.create_security_group, false)
+
 }

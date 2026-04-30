@@ -211,34 +211,6 @@ variable "iam_config" {
   default = {}
 }
 
-variable "vpc_config" {
-  description = "VPC configuration for Glue connections"
-  type = object({
-    create_security_group      = optional(bool, false)
-    vpc_id                     = optional(string, null)
-    security_group_name        = optional(string, null)
-    security_group_description = optional(string, "Glue Security Group")
-    ingress_rules = optional(map(object({
-      description     = string
-      from_port       = number
-      to_port         = number
-      protocol        = string
-      cidr_blocks     = optional(list(string), [])
-      security_groups = optional(list(string), [])
-    })), {})
-    egress_rules = optional(map(object({
-      description     = string
-      from_port       = number
-      to_port         = number
-      protocol        = string
-      cidr_blocks     = optional(list(string), [])
-      security_groups = optional(list(string), [])
-    })), {})
-    subnet_ids = optional(list(string), [])
-  })
-  default = {}
-}
-
 variable "glue_crawlers" {
   description = "Glue crawlers. Kept separate from glue_config to avoid for_each unknown-value issues when targets contain apply-time values."
   type = map(object({

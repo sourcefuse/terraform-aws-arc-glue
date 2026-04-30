@@ -102,16 +102,3 @@ output "module_version" {
   description = "The version of this module"
   value       = "1.0.0"
 }
-
-# ============================================================
-# Conditional Creation Outputs
-# ============================================================
-output "iam_role_created" {
-  description = "Whether IAM role was created"
-  value       = local.create_iam_role
-}
-
-output "security_group_created" {
-  description = "Whether security group was created"
-  value       = local.create_security_group
-}

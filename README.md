@@ -133,7 +133,6 @@ No modules.
 | <a name="input_region"></a> [region](#input\_region) | AWS region where resources will be created | `string` | `"us-east-1"` | no |
 | <a name="input_secrets_config"></a> [secrets\_config](#input\_secrets\_config) | Secrets Manager configuration for storing credentials | <pre>object({<br/>    secrets = optional(map(object({<br/>      name          = optional(string, null)<br/>      description   = optional(string, "")<br/>      secret_string = optional(string, null)<br/>    })), {})<br/>  })</pre> | `{}` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | Default tags to apply to all resources | `map(string)` | `{}` | no |
-| <a name="input_vpc_config"></a> [vpc\_config](#input\_vpc\_config) | VPC configuration for Glue connections | <pre>object({<br/>    create_security_group      = optional(bool, false)<br/>    vpc_id                     = optional(string, null)<br/>    security_group_name        = optional(string, null)<br/>    security_group_description = optional(string, "Glue Security Group")<br/>    ingress_rules = optional(map(object({<br/>      description     = string<br/>      from_port       = number<br/>      to_port         = number<br/>      protocol        = string<br/>      cidr_blocks     = optional(list(string), [])<br/>      security_groups = optional(list(string), [])<br/>    })), {})<br/>    egress_rules = optional(map(object({<br/>      description     = string<br/>      from_port       = number<br/>      to_port         = number<br/>      protocol        = string<br/>      cidr_blocks     = optional(list(string), [])<br/>      security_groups = optional(list(string), [])<br/>    })), {})<br/>    subnet_ids = optional(list(string), [])<br/>  })</pre> | `{}` | no |
 
 ## Outputs
 
@@ -154,10 +153,8 @@ No modules.
 | <a name="output_glue_secret_arns"></a> [glue\_secret\_arns](#output\_glue\_secret\_arns) | Map of secret key to ARN |
 | <a name="output_glue_security_configurations"></a> [glue\_security\_configurations](#output\_glue\_security\_configurations) | Map of security configuration key to name |
 | <a name="output_glue_workflows"></a> [glue\_workflows](#output\_glue\_workflows) | Map of workflow key to workflow object |
-| <a name="output_iam_role_created"></a> [iam\_role\_created](#output\_iam\_role\_created) | Whether IAM role was created |
 | <a name="output_module_version"></a> [module\_version](#output\_module\_version) | The version of this module |
 | <a name="output_resource_prefix"></a> [resource\_prefix](#output\_resource\_prefix) | The resource prefix used for naming |
-| <a name="output_security_group_created"></a> [security\_group\_created](#output\_security\_group\_created) | Whether security group was created |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
 ## Examples
