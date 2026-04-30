@@ -67,25 +67,6 @@ output "glue_iam_role_id" {
   description = "The ID of the Glue IAM role"
   value       = try(aws_iam_role.glue[0].id, null)
 }
-
-# ============================================================
-# Security Group Outputs
-# ============================================================
-output "glue_security_group_id" {
-  description = "The ID of the Glue security group"
-  value       = try(aws_security_group.glue[0].id, null)
-}
-
-output "glue_security_group_arn" {
-  description = "The ARN of the Glue security group"
-  value       = try(aws_security_group.glue[0].arn, null)
-}
-
-output "glue_security_group_name" {
-  description = "The name of the Glue security group"
-  value       = try(aws_security_group.glue[0].name, null)
-}
-
 # ============================================================
 # Glue Security Configuration Outputs
 # ============================================================

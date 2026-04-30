@@ -1,23 +1,4 @@
 # ============================================================
-# Security Group (Optional)
-# ============================================================
-resource "aws_security_group" "glue" {
-  count = local.create_security_group ? 1 : 0
-
-  name_prefix = try(var.vpc_config.security_group_name, "${local.resource_prefix}-glue-")
-  description = try(var.vpc_config.security_group_description, "Glue Security Group")
-  vpc_id      = var.vpc_config.vpc_id
-
-  tags = merge(var.tags, {
-    Name = "${local.resource_prefix}-glue"
-  })
-
-  lifecycle {
-    create_before_destroy = true
-  }
-}
-
-# ============================================================
 # IAM Role
 # ============================================================
 resource "aws_iam_role" "glue" {

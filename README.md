@@ -114,7 +114,6 @@ No modules.
 | [aws_iam_role_policy_attachment.glue_s3](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_secretsmanager_secret.main](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/secretsmanager_secret) | resource |
 | [aws_secretsmanager_secret_version.main](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/secretsmanager_secret_version) | resource |
-| [aws_security_group.glue](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group) | resource |
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
 | [aws_iam_policy_document.assume_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 
@@ -154,9 +153,6 @@ No modules.
 | <a name="output_glue_job_names"></a> [glue\_job\_names](#output\_glue\_job\_names) | Map of job key to name |
 | <a name="output_glue_secret_arns"></a> [glue\_secret\_arns](#output\_glue\_secret\_arns) | Map of secret key to ARN |
 | <a name="output_glue_security_configurations"></a> [glue\_security\_configurations](#output\_glue\_security\_configurations) | Map of security configuration key to name |
-| <a name="output_glue_security_group_arn"></a> [glue\_security\_group\_arn](#output\_glue\_security\_group\_arn) | The ARN of the Glue security group |
-| <a name="output_glue_security_group_id"></a> [glue\_security\_group\_id](#output\_glue\_security\_group\_id) | The ID of the Glue security group |
-| <a name="output_glue_security_group_name"></a> [glue\_security\_group\_name](#output\_glue\_security\_group\_name) | The name of the Glue security group |
 | <a name="output_glue_workflows"></a> [glue\_workflows](#output\_glue\_workflows) | Map of workflow key to workflow object |
 | <a name="output_iam_role_created"></a> [iam\_role\_created](#output\_iam\_role\_created) | Whether IAM role was created |
 | <a name="output_module_version"></a> [module\_version](#output\_module\_version) | The version of this module |
