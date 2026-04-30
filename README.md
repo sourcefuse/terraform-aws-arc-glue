@@ -28,7 +28,7 @@ To see a full example, check out the [complete example](./example/complete/main.
 
 ```hcl
 module "glue" {
-  source = "git::https://github.com/sourcefuse/terraform-aws-arc-glue.git"
+  source = "sourcefuse/arc-glue/aws"
 
   namespace   = "mycompany"
   environment = "prod"
