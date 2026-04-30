@@ -8,7 +8,7 @@ resource "aws_security_group" "glue" {
   description = try(var.vpc_config.security_group_description, "Glue Security Group")
   vpc_id      = var.vpc_config.vpc_id
 
-  tags = merge(local.standard_tags, {
+  tags = merge(var.tags, {
     Name = "${local.resource_prefix}-glue"
   })
 
@@ -27,7 +27,7 @@ resource "aws_iam_role" "glue" {
   description          = try(var.iam_config.role_description, "AWS Glue IAM Role")
   assume_role_policy   = data.aws_iam_policy_document.assume_role[0].json
   permissions_boundary = try(var.iam_config.permissions_boundary, null)
-  tags                 = local.standard_tags
+  tags                 = var.tags
 
   lifecycle {
     create_before_destroy = true
@@ -89,7 +89,7 @@ resource "aws_glue_catalog_database" "main" {
   name        = try(var.glue_config.database.name, "default_database")
   description = try(var.glue_config.database.description, "Default Glue database")
 
-  tags = local.standard_tags
+  tags = var.tags
 }
 
 # ============================================================
@@ -149,7 +149,7 @@ resource "aws_glue_crawler" "main" {
     }
   }
 
-  tags = merge(local.standard_tags, try(each.value.tags, {}))
+  tags = merge(var.tags, try(each.value.tags, {}))
 
   depends_on = [aws_glue_connection.main]
 }
@@ -181,7 +181,7 @@ resource "aws_glue_job" "main" {
 
   default_arguments = try(each.value.default_arguments, {})
 
-  tags = local.standard_tags
+  tags = var.tags
 }
 
 # ============================================================
@@ -194,7 +194,7 @@ resource "aws_glue_workflow" "main" {
   description         = try(each.value.description, "")
   max_concurrent_runs = try(each.value.max_concurrent_runs, null)
 
-  tags = local.standard_tags
+  tags = var.tags
 }
 
 # ============================================================
@@ -235,7 +235,7 @@ resource "aws_glue_trigger" "main" {
     }
   }
 
-  tags = local.standard_tags
+  tags = var.tags
 }
 
 # ============================================================
@@ -315,7 +315,7 @@ resource "aws_secretsmanager_secret" "main" {
 
   name        = try(each.value.name, "${local.resource_prefix}-${each.key}")
   description = try(each.value.description, "")
-  tags        = local.standard_tags
+  tags        = var.tags
 }
 
 resource "aws_secretsmanager_secret_version" "main" {

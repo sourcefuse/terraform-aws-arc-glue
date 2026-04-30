@@ -3,18 +3,6 @@ locals {
   # Create standardized resource names
   resource_prefix = "${var.namespace}-${var.environment}-${var.name}"
 
-  # Standard tags merged with user-provided tags
-  standard_tags = merge(
-    {
-      "ManagedBy"   = "Terraform"
-      "Module"      = "aws-terraform-glue"
-      "Namespace"   = var.namespace
-      "Environment" = var.environment
-      "Name"        = var.name
-    },
-    var.tags
-  )
-
   # Extract nested configs for easier access
   iam_enabled = try(var.iam_config.create_role, true)
 

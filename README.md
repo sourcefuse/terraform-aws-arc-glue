@@ -162,7 +162,6 @@ No modules.
 | <a name="output_module_version"></a> [module\_version](#output\_module\_version) | The version of this module |
 | <a name="output_resource_prefix"></a> [resource\_prefix](#output\_resource\_prefix) | The resource prefix used for naming |
 | <a name="output_security_group_created"></a> [security\_group\_created](#output\_security\_group\_created) | Whether security group was created |
-| <a name="output_standard_tags"></a> [standard\_tags](#output\_standard\_tags) | The standard tags applied to resources |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
 ## Examples

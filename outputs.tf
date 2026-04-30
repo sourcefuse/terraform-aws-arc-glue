@@ -112,11 +112,6 @@ output "resource_prefix" {
   value       = local.resource_prefix
 }
 
-output "standard_tags" {
-  description = "The standard tags applied to resources"
-  value       = local.standard_tags
-}
-
 output "aws_account_id" {
   description = "The AWS account ID where resources are created"
   value       = data.aws_caller_identity.current.account_id
