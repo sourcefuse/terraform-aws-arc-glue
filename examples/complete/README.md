@@ -28,77 +28,6 @@ Before running this example, ensure you have:
 - **KMS Key**: Existing KMS key for encryption (optional)
 - **Advanced Knowledge**: Understanding of AWS Glue, networking, and security
 
-<!-- BEGIN_TF_DOCS -->
-## Requirements
-
-| Name | Version |
-|------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.0.0, < 7.0.0 |
-
-## Providers
-
-| Name | Version |
-|------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 6.40.0 |
-
-## Modules
-
-| Name | Source | Version |
-|------|--------|---------|
-| <a name="module_glue_complete"></a> [glue\_complete](#module\_glue\_complete) | ../../ | n/a |
-| <a name="module_rds"></a> [rds](#module\_rds) | sourcefuse/arc-db/aws | 4.0.2 |
-| <a name="module_redshift"></a> [redshift](#module\_redshift) | sourcefuse/arc-redshift/aws | 0.0.1 |
-| <a name="module_s3_data"></a> [s3\_data](#module\_s3\_data) | sourcefuse/arc-s3/aws | 0.0.7 |
-| <a name="module_s3_logs"></a> [s3\_logs](#module\_s3\_logs) | sourcefuse/arc-s3/aws | 0.0.7 |
-| <a name="module_s3_scripts"></a> [s3\_scripts](#module\_s3\_scripts) | sourcefuse/arc-s3/aws | 0.0.7 |
-
-## Resources
-
-| Name | Type |
-|------|------|
-| [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
-| [aws_subnets.private_subnets](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/subnets) | data source |
-| [aws_vpc.arc_poc_vpc](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/vpc) | data source |
-
-## Inputs
-
-| Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
-| <a name="input_authorized_accounts"></a> [authorized\_accounts](#input\_authorized\_accounts) | List of AWS account ARNs for cross-account Glue catalog access | `list(string)` | `[]` | no |
-| <a name="input_environment"></a> [environment](#input\_environment) | Environment identifier | `string` | `"poc"` | no |
-| <a name="input_name"></a> [name](#input\_name) | Name prefix for resources | `string` | `"glue-complete"` | no |
-| <a name="input_namespace"></a> [namespace](#input\_namespace) | Namespace/organization identifier | `string` | `"arc"` | no |
-| <a name="input_organization_id"></a> [organization\_id](#input\_organization\_id) | AWS Organization ID for catalog resource policy condition | `string` | `""` | no |
-| <a name="input_permissions_boundary_arn"></a> [permissions\_boundary\_arn](#input\_permissions\_boundary\_arn) | ARN of IAM permissions boundary to attach to the Glue role | `string` | `null` | no |
-| <a name="input_rds_database"></a> [rds\_database](#input\_rds\_database) | RDS database name | `string` | `"testdb"` | no |
-| <a name="input_rds_password"></a> [rds\_password](#input\_rds\_password) | RDS master password | `string` | `"ChangeMe123!"` | no |
-| <a name="input_redshift_database"></a> [redshift\_database](#input\_redshift\_database) | Redshift database name | `string` | `"dev"` | no |
-| <a name="input_redshift_password"></a> [redshift\_password](#input\_redshift\_password) | Redshift master password | `string` | n/a | yes |
-| <a name="input_redshift_username"></a> [redshift\_username](#input\_redshift\_username) | Redshift username | `string` | `"admin"` | no |
-| <a name="input_region"></a> [region](#input\_region) | AWS region for resources | `string` | `"us-east-1"` | no |
-| <a name="input_tags"></a> [tags](#input\_tags) | Tags to apply to resources | `map(string)` | <pre>{<br/>  "Environment": "POC",<br/>  "ManagedBy": "Terraform",<br/>  "Project": "Glue Complete Example"<br/>}</pre> | no |
-
-## Outputs
-
-| Name | Description |
-|------|-------------|
-| <a name="output_glue_connection_names"></a> [glue\_connection\_names](#output\_glue\_connection\_names) | Map of connection key to name |
-| <a name="output_glue_crawler_names"></a> [glue\_crawler\_names](#output\_glue\_crawler\_names) | Map of crawler key to name |
-| <a name="output_glue_database_name"></a> [glue\_database\_name](#output\_glue\_database\_name) | The name of the Glue catalog database |
-| <a name="output_glue_iam_role_arn"></a> [glue\_iam\_role\_arn](#output\_glue\_iam\_role\_arn) | The ARN of the Glue IAM role |
-| <a name="output_glue_job_names"></a> [glue\_job\_names](#output\_glue\_job\_names) | Map of job key to name |
-| <a name="output_glue_secret_arns"></a> [glue\_secret\_arns](#output\_glue\_secret\_arns) | Map of Glue secret key to ARN |
-| <a name="output_glue_security_configurations"></a> [glue\_security\_configurations](#output\_glue\_security\_configurations) | Map of security configuration key to name |
-| <a name="output_glue_security_group_id"></a> [glue\_security\_group\_id](#output\_glue\_security\_group\_id) | The ID of the Glue security group |
-| <a name="output_glue_workflows"></a> [glue\_workflows](#output\_glue\_workflows) | Map of workflow key to workflow object |
-| <a name="output_rds_database_name"></a> [rds\_database\_name](#output\_rds\_database\_name) | The RDS database name |
-| <a name="output_redshift_database_name"></a> [redshift\_database\_name](#output\_redshift\_database\_name) | The Redshift database name |
-| <a name="output_s3_data_bucket"></a> [s3\_data\_bucket](#output\_s3\_data\_bucket) | The S3 bucket for Glue data |
-| <a name="output_s3_logs_bucket"></a> [s3\_logs\_bucket](#output\_s3\_logs\_bucket) | The S3 bucket for Glue logs |
-| <a name="output_s3_scripts_bucket"></a> [s3\_scripts\_bucket](#output\_s3\_scripts\_bucket) | The S3 bucket for Glue scripts |
-<!-- END_TF_DOCS -->
-
 ## Quick Start
 
 ### 1. Clone and Navigate
@@ -592,3 +521,73 @@ aws cloudwatch get-metric-statistics --namespace AWS/Glue \
   --metric-name DPUSeconds --dimensions Name=JobName,Value=spark-transform \
   --start-time 2024-01-01T00:00:00Z --end-time 2024-01-01T23:59:59Z --period 3600
 ```
+<!-- BEGIN_TF_DOCS -->
+## Requirements
+
+| Name | Version |
+|------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.0.0, < 7.0.0 |
+
+## Providers
+
+| Name | Version |
+|------|---------|
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 6.40.0 |
+
+## Modules
+
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_glue_complete"></a> [glue\_complete](#module\_glue\_complete) | ../../ | n/a |
+| <a name="module_rds"></a> [rds](#module\_rds) | sourcefuse/arc-db/aws | 4.0.2 |
+| <a name="module_redshift"></a> [redshift](#module\_redshift) | sourcefuse/arc-redshift/aws | 0.0.1 |
+| <a name="module_s3_data"></a> [s3\_data](#module\_s3\_data) | sourcefuse/arc-s3/aws | 0.0.7 |
+| <a name="module_s3_logs"></a> [s3\_logs](#module\_s3\_logs) | sourcefuse/arc-s3/aws | 0.0.7 |
+| <a name="module_s3_scripts"></a> [s3\_scripts](#module\_s3\_scripts) | sourcefuse/arc-s3/aws | 0.0.7 |
+
+## Resources
+
+| Name | Type |
+|------|------|
+| [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
+| [aws_subnets.private_subnets](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/subnets) | data source |
+| [aws_vpc.arc_poc_vpc](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/vpc) | data source |
+
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_authorized_accounts"></a> [authorized\_accounts](#input\_authorized\_accounts) | List of AWS account ARNs for cross-account Glue catalog access | `list(string)` | `[]` | no |
+| <a name="input_environment"></a> [environment](#input\_environment) | Environment identifier | `string` | `"poc"` | no |
+| <a name="input_name"></a> [name](#input\_name) | Name prefix for resources | `string` | `"glue-complete"` | no |
+| <a name="input_namespace"></a> [namespace](#input\_namespace) | Namespace/organization identifier | `string` | `"arc"` | no |
+| <a name="input_organization_id"></a> [organization\_id](#input\_organization\_id) | AWS Organization ID for catalog resource policy condition | `string` | `""` | no |
+| <a name="input_permissions_boundary_arn"></a> [permissions\_boundary\_arn](#input\_permissions\_boundary\_arn) | ARN of IAM permissions boundary to attach to the Glue role | `string` | `null` | no |
+| <a name="input_rds_database"></a> [rds\_database](#input\_rds\_database) | RDS database name | `string` | `"testdb"` | no |
+| <a name="input_rds_password"></a> [rds\_password](#input\_rds\_password) | RDS master password | `string` | `"ChangeMe123!"` | no |
+| <a name="input_redshift_database"></a> [redshift\_database](#input\_redshift\_database) | Redshift database name | `string` | `"dev"` | no |
+| <a name="input_redshift_password"></a> [redshift\_password](#input\_redshift\_password) | Redshift master password | `string` | n/a | yes |
+| <a name="input_redshift_username"></a> [redshift\_username](#input\_redshift\_username) | Redshift username | `string` | `"admin"` | no |
+| <a name="input_region"></a> [region](#input\_region) | AWS region for resources | `string` | `"us-east-1"` | no |
+| <a name="input_tags"></a> [tags](#input\_tags) | Tags to apply to resources | `map(string)` | <pre>{<br/>  "Environment": "POC",<br/>  "ManagedBy": "Terraform",<br/>  "Project": "Glue Complete Example"<br/>}</pre> | no |
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| <a name="output_glue_connection_names"></a> [glue\_connection\_names](#output\_glue\_connection\_names) | Map of connection key to name |
+| <a name="output_glue_crawler_names"></a> [glue\_crawler\_names](#output\_glue\_crawler\_names) | Map of crawler key to name |
+| <a name="output_glue_database_name"></a> [glue\_database\_name](#output\_glue\_database\_name) | The name of the Glue catalog database |
+| <a name="output_glue_iam_role_arn"></a> [glue\_iam\_role\_arn](#output\_glue\_iam\_role\_arn) | The ARN of the Glue IAM role |
+| <a name="output_glue_job_names"></a> [glue\_job\_names](#output\_glue\_job\_names) | Map of job key to name |
+| <a name="output_glue_secret_arns"></a> [glue\_secret\_arns](#output\_glue\_secret\_arns) | Map of Glue secret key to ARN |
+| <a name="output_glue_security_configurations"></a> [glue\_security\_configurations](#output\_glue\_security\_configurations) | Map of security configuration key to name |
+| <a name="output_glue_security_group_id"></a> [glue\_security\_group\_id](#output\_glue\_security\_group\_id) | The ID of the Glue security group |
+| <a name="output_glue_workflows"></a> [glue\_workflows](#output\_glue\_workflows) | Map of workflow key to workflow object |
+| <a name="output_rds_database_name"></a> [rds\_database\_name](#output\_rds\_database\_name) | The RDS database name |
+| <a name="output_redshift_database_name"></a> [redshift\_database\_name](#output\_redshift\_database\_name) | The Redshift database name |
+| <a name="output_s3_data_bucket"></a> [s3\_data\_bucket](#output\_s3\_data\_bucket) | The S3 bucket for Glue data |
+| <a name="output_s3_logs_bucket"></a> [s3\_logs\_bucket](#output\_s3\_logs\_bucket) | The S3 bucket for Glue logs |
+| <a name="output_s3_scripts_bucket"></a> [s3\_scripts\_bucket](#output\_s3\_scripts\_bucket) | The S3 bucket for Glue scripts |
+<!-- END_TF_DOCS -->

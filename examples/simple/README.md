@@ -21,51 +21,6 @@ Before running this example, ensure you have:
 - **AWS CLI**: Configured with valid credentials
 - **Basic Knowledge**: Understanding of AWS Glue concepts
 
-<!-- BEGIN_TF_DOCS -->
-## Requirements
-
-| Name | Version |
-|------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.0.0, < 7.0.0 |
-
-## Providers
-
-No providers.
-
-## Modules
-
-| Name | Source | Version |
-|------|--------|---------|
-| <a name="module_glue"></a> [glue](#module\_glue) | ../../ | n/a |
-| <a name="module_s3_bucket"></a> [s3\_bucket](#module\_s3\_bucket) | sourcefuse/arc-s3/aws | 0.0.7 |
-
-## Resources
-
-No resources.
-
-## Inputs
-
-| Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
-| <a name="input_environment"></a> [environment](#input\_environment) | Environment identifier | `string` | `"dev"` | no |
-| <a name="input_name"></a> [name](#input\_name) | Name prefix for resources | `string` | `"glue"` | no |
-| <a name="input_namespace"></a> [namespace](#input\_namespace) | Namespace/organization identifier | `string` | `"example"` | no |
-| <a name="input_region"></a> [region](#input\_region) | AWS region for resources | `string` | `"us-east-1"` | no |
-| <a name="input_tags"></a> [tags](#input\_tags) | Tags to apply to resources | `map(string)` | <pre>{<br/>  "Environment": "Development",<br/>  "Project": "Glue Simple Example"<br/>}</pre> | no |
-
-## Outputs
-
-| Name | Description |
-|------|-------------|
-| <a name="output_crawler_names"></a> [crawler\_names](#output\_crawler\_names) | Glue crawler names |
-| <a name="output_database_name"></a> [database\_name](#output\_database\_name) | Glue database name |
-| <a name="output_iam_role_arn"></a> [iam\_role\_arn](#output\_iam\_role\_arn) | IAM role ARN |
-| <a name="output_resource_prefix"></a> [resource\_prefix](#output\_resource\_prefix) | Resource prefix used |
-| <a name="output_s3_bucket_arn"></a> [s3\_bucket\_arn](#output\_s3\_bucket\_arn) | S3 bucket ARN |
-| <a name="output_s3_bucket_id"></a> [s3\_bucket\_id](#output\_s3\_bucket\_id) | S3 bucket ID for data storage |
-<!-- END_TF_DOCS -->
-
 ## Quick Start
 
 ### 1. Clone and Navigate
@@ -220,3 +175,47 @@ After running the crawler, verify tables were created:
 aws glue get-tables --database-name mycompany_dev_simple_db
 # Should show discovered tables from your S3 data
 ```
+<!-- BEGIN_TF_DOCS -->
+## Requirements
+
+| Name | Version |
+|------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.0.0, < 7.0.0 |
+
+## Providers
+
+No providers.
+
+## Modules
+
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_glue"></a> [glue](#module\_glue) | ../../ | n/a |
+| <a name="module_s3_bucket"></a> [s3\_bucket](#module\_s3\_bucket) | sourcefuse/arc-s3/aws | 0.0.7 |
+
+## Resources
+
+No resources.
+
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_environment"></a> [environment](#input\_environment) | Environment identifier | `string` | `"dev"` | no |
+| <a name="input_name"></a> [name](#input\_name) | Name prefix for resources | `string` | `"glue"` | no |
+| <a name="input_namespace"></a> [namespace](#input\_namespace) | Namespace/organization identifier | `string` | `"example"` | no |
+| <a name="input_region"></a> [region](#input\_region) | AWS region for resources | `string` | `"us-east-1"` | no |
+| <a name="input_tags"></a> [tags](#input\_tags) | Tags to apply to resources | `map(string)` | <pre>{<br/>  "Environment": "Development",<br/>  "Project": "Glue Simple Example"<br/>}</pre> | no |
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| <a name="output_crawler_names"></a> [crawler\_names](#output\_crawler\_names) | Glue crawler names |
+| <a name="output_database_name"></a> [database\_name](#output\_database\_name) | Glue database name |
+| <a name="output_iam_role_arn"></a> [iam\_role\_arn](#output\_iam\_role\_arn) | IAM role ARN |
+| <a name="output_resource_prefix"></a> [resource\_prefix](#output\_resource\_prefix) | Resource prefix used |
+| <a name="output_s3_bucket_arn"></a> [s3\_bucket\_arn](#output\_s3\_bucket\_arn) | S3 bucket ARN |
+| <a name="output_s3_bucket_id"></a> [s3\_bucket\_id](#output\_s3\_bucket\_id) | S3 bucket ID for data storage |
+<!-- END_TF_DOCS -->
