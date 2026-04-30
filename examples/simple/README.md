@@ -21,6 +21,51 @@ Before running this example, ensure you have:
 - **AWS CLI**: Configured with valid credentials
 - **Basic Knowledge**: Understanding of AWS Glue concepts
 
+<!-- BEGIN_TF_DOCS -->
+## Requirements
+
+| Name | Version |
+|------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.0.0, < 7.0.0 |
+
+## Providers
+
+No providers.
+
+## Modules
+
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_glue"></a> [glue](#module\_glue) | ../../ | n/a |
+| <a name="module_s3_bucket"></a> [s3\_bucket](#module\_s3\_bucket) | sourcefuse/arc-s3/aws | 0.0.7 |
+
+## Resources
+
+No resources.
+
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_environment"></a> [environment](#input\_environment) | Environment identifier | `string` | `"dev"` | no |
+| <a name="input_name"></a> [name](#input\_name) | Name prefix for resources | `string` | `"glue"` | no |
+| <a name="input_namespace"></a> [namespace](#input\_namespace) | Namespace/organization identifier | `string` | `"example"` | no |
+| <a name="input_region"></a> [region](#input\_region) | AWS region for resources | `string` | `"us-east-1"` | no |
+| <a name="input_tags"></a> [tags](#input\_tags) | Tags to apply to resources | `map(string)` | <pre>{<br/>  "Environment": "Development",<br/>  "Project": "Glue Simple Example"<br/>}</pre> | no |
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| <a name="output_crawler_names"></a> [crawler\_names](#output\_crawler\_names) | Glue crawler names |
+| <a name="output_database_name"></a> [database\_name](#output\_database\_name) | Glue database name |
+| <a name="output_iam_role_arn"></a> [iam\_role\_arn](#output\_iam\_role\_arn) | IAM role ARN |
+| <a name="output_resource_prefix"></a> [resource\_prefix](#output\_resource\_prefix) | Resource prefix used |
+| <a name="output_s3_bucket_arn"></a> [s3\_bucket\_arn](#output\_s3\_bucket\_arn) | S3 bucket ARN |
+| <a name="output_s3_bucket_id"></a> [s3\_bucket\_id](#output\_s3\_bucket\_id) | S3 bucket ID for data storage |
+<!-- END_TF_DOCS -->
+
 ## Quick Start
 
 ### 1. Clone and Navigate
@@ -175,93 +220,3 @@ After running the crawler, verify tables were created:
 aws glue get-tables --database-name mycompany_dev_simple_db
 # Should show discovered tables from your S3 data
 ```
-
-## Troubleshooting
-
-### Common Issues
-
-#### 1. Crawler Fails with Access Denied
-**Problem**: Crawler cannot access S3 bucket
-**Solution**: Ensure IAM role has S3 permissions and bucket policy allows access
-
-#### 2. No Tables Discovered
-**Problem**: Crawler runs but creates no tables
-**Solution**:
-- Verify S3 path is correct
-- Check data format is supported (CSV, JSON, Parquet, etc.)
-- Ensure bucket contains data files
-
-#### 3. Crawler Timeout
-**Problem**: Crawler times out on large datasets
-**Solution**:
-```hcl
-glue_crawlers = {
-  "s3-crawler" = {
-    # Increase timeout
-    timeouts = {
-      create = "60m"
-    }
-  }
-}
-```
-
-### Getting Help
-
-If you encounter issues:
-1. Check CloudWatch Logs: `/aws-glue/crawlers/output`
-2. Review IAM permissions in the AWS Console
-3. Verify S3 bucket exists and is accessible
-4. Check Terraform logs for detailed error messages
-
-## Cleanup
-
-### Remove All Resources
-```bash
-terraform destroy
-```
-
-### Manual Cleanup (if needed)
-```bash
-# Delete Glue database (must be empty)
-aws glue delete-database --name mycompany_dev_simple_db
-
-# Delete crawler
-aws glue delete-crawler --name mycompany_dev_simple-s3-crawler
-```
-
-## Next Steps
-
-### Advanced Features
-Once comfortable with the simple example, explore the [Complete Example](../complete/) for:
-
-- **Multiple Job Types**: Spark ETL, Python Shell, Ray jobs
-- **Advanced Crawlers**: JDBC, MongoDB, Delta Lake sources
-- **Workflow Orchestration**: Complex multi-step pipelines
-- **Custom Triggers**: Scheduled and event-based execution
-- **External Connections**: RDS, Redshift, MongoDB integration
-- **Enhanced Security**: KMS encryption, VPC integration
-- **Advanced Monitoring**: CloudWatch alarms and metrics
-
-### Production Considerations
-- **High Availability**: Multi-region deployment strategies
-- **Disaster Recovery**: Backup and restore procedures
-- **Security**: VPC deployment, encryption at rest
-- **Monitoring**: Comprehensive alerting and dashboards
-- **Cost Optimization**: Right-sizing resources and execution classes
-
-### Additional Resources
-- [Main Module Documentation](../../README.md)
-- [Complete Usage Guide](../../docs/module-usage-guide/README.md)
-- [AWS Glue Documentation](https://docs.aws.amazon.com/glue/)
-- [Terraform AWS Provider](https://registry.terraform.io/providers/hashicorp/aws/latest/docs)
-
-## Contributing
-
-Found an issue or want to improve this example? Please:
-1. Check existing [GitHub Issues](https://github.com/sourcefuse/terraform-aws-arc-glue/issues)
-2. Create a new issue with details
-3. Submit a pull request with your improvements
-
-## License
-
-This example is part of the terraform-aws-arc-glue module, licensed under the Apache 2.0 License.
