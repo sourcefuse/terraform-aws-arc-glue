@@ -9,5 +9,4 @@ locals {
   # Conditional role creation
   create_iam_role = local.iam_enabled && var.iam_config.role_name == null
 
-
 }
