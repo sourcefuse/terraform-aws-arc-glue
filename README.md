@@ -21,7 +21,9 @@
 
 Manages AWS Glue resources — data catalog databases, ETL jobs, crawlers, workflows, connections, and triggers — for data lake and ETL pipelines.
 
-For more information about this repository and its usage, please see [Terraform AWS GLUE Usage Guide](https://github.com/sourcefuse/terraform-aws-arc-glue/blob/main/docs/module-usage-guide/README.md).
+## Architecture
+
+![Architecture Diagram](./static/arch.png)
 
 
 ## What It Does
@@ -33,6 +35,8 @@ For more information about this repository and its usage, please see [Terraform 
 - Glue connections for JDBC and network sources
 - IAM roles with least-privilege policies
 - CloudWatch metrics and job bookmarks
+
+For more information about this repository and its usage, please see [Terraform AWS GLUE Usage Guide](https://github.com/sourcefuse/terraform-aws-arc-glue/blob/main/docs/module-usage-guide/README.md).
 
 ## Quickstart
 
