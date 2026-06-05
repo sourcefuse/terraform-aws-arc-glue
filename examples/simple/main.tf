@@ -11,7 +11,6 @@ terraform {
 
 provider "aws" {
   region  = var.region
-  profile = "arc-poc-2"
 }
 
 # ============================================================
