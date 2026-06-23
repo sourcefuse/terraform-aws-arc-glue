@@ -17,6 +17,9 @@
 
 [![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=sourcefuse_terraform-aws-arc-glue2&token=903109dbf648474b9e189a70bbb9e68bff79cb93)](https://sonarcloud.io/summary/new_code?id=sourcefuse_terraform-aws-arc-glue2)
 
+> [!TIP]
+> 🤖 **New:** Use this module with AI assistants via the [ARC IaC MCP Server](https://github.com/sourcefuse/arc-iac-mcp) — search, scaffold, and security-scan ARC modules from natural language. [Quick setup ↓](#ai-assistant-integration-arc-iac-mcp)
+
 ## Overview
 
 Manages AWS Glue resources — data catalog databases, ETL jobs, crawlers, workflows, connections, and triggers — for data lake and ETL pipelines.
